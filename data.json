@@ -1,0 +1,58 @@
+[{
+		"matricule": "10001",
+		"filiere": "SI",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "GOUNOU",
+			"prenom": "Boubacar"
+		}
+	},
+
+	{
+		"matricule": "10001",
+		"filiere": "SIRI",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "CHABI",
+			"prenom": "Serge"
+
+		}
+	},
+
+	{
+		"matricule": "10002",
+		"filiere": "SI",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "OROU",
+			"prenom": "Achad"
+		}
+	},
+	{
+		"matricule": "10002",
+		"filiere": "GL",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "GAFFAN",
+			"prenom": "Renaud"
+		}
+	},
+	{
+		"matricule": "10003",
+		"filiere": "GL",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "ASSOGBA",
+			"prenom": "Emmanuel"
+		}
+	},
+	{
+		"matricule": "10003",
+		"filiere": "SIRI",
+		"info": {
+			"info_timestamp": "1612519200",
+			"nom": "AGOSSADOU",
+			"prenom": "Lionel"
+		}
+	}
+]

@@ -1,4 +1,227 @@
 
+##-----------------------------------------------------------#
+#   Partie 2 :  Manipulation DynamoDb
+#   boto3
+##------------------------------------------------------------#
+
+# #-----------------------------------------------------------#
+# # Suppression de tables
+# #------------------------------------------------------------#
+#
+# import boto3
+#
+# def delete_devices_table(dynamodb=None):
+#     dynamodb = boto3.resource('dynamodb')
+#
+#     devices_table = dynamodb.Table('Etudiant')
+#     devices_table.delete()
+#
+# if __name__ == '__main__':
+#     delete_devices_table()
+#     print("Table supprimée.")
+#
+
+
+#
+# #-----------------------------------------------------------#
+# #Suppression de données dans la tables
+# #------------------------------------------------------------#
+#
+
+# from botocore.exceptions import ClientError
+# from pprint import pprint
+# import boto3  # import Boto3
+#
+#
+# def delete_device(matricule, filiere, info_timestamp, dynamodb=None):
+#
+#     dynamodb = boto3.resource('dynamodb')
+#
+#     etudiant_table = dynamodb.Table('Etudiant')
+#
+#     try:
+#         response = etudiant_table.delete_item(
+#             Key={
+#                 'matricule': matricule,
+#                 'filiere': filiere
+#             },
+#             # Condition
+#             ConditionExpression="info.info_timestamp <= :value",
+#             ExpressionAttributeValues={
+#                 ":value": info_timestamp
+#             }
+#         )
+#     except ClientError as er:
+#         if er.response['Error']['Code'] == "ConditionalCheckFailedException":
+#             print(er.response['Error']['Message'])
+#         else:
+#             raise
+#     else:
+#         return response
+#
+#
+# if __name__ == '__main__':
+#     print("DynamoBD  Suppression")
+#     # Provide device_id, datacount, info_timestamp
+#     delete_response = delete_device("10001","SI", "1712519200")
+#     if delete_response:
+#         print("Etudiant supprimé:")
+#         # response
+#         pprint(delete_response)
+
+
+
+
+# #-----------------------------------------------------------#
+# # Mise à jour de données dans la tables
+# #------------------------------------------------------------#
+#
+#
+# from pprint import pprint  # import pprint, a module that enable to “pretty-print”
+# import boto3
+#
+# def update_etudiant(matricule, filiere, info_timestamp,nom,prenom, dynamodb=None):
+#
+#     dynamodb = boto3.resource('dynamodb')
+#
+#     etudiant_table = dynamodb.Table('Etudiant')
+#
+#     response = etudiant_table.update_item(
+#         Key={
+#             'matricule': matricule,
+#             'filiere': filiere
+#         },
+#         UpdateExpression="set info.info_timestamp=:time, info.nom=:n, info.prenom=:p",
+#         ExpressionAttributeValues={
+#             ':time': info_timestamp,
+#             ':n': nom,
+#             ':p': prenom,
+#         }
+#     )
+#     return response
+#
+#
+# if __name__ == '__main__':
+#     update_response = update_etudiant( "10001", "SI", "1612522870", "nom_modifie", "prenom_modif")
+#     print("Données étudiant modifiée")
+#     # Print response
+#     pprint(update_response)
+
+#
+#
+# # #-----------------------------------------------------------#
+# # # Lecture de données dans la tables
+# # #------------------------------------------------------------#
+#
+# # import Boto3 exceptions and error handling module
+# from botocore.exceptions import ClientError
+# import boto3
+#
+#
+# def get_device(matricule, filiere, dynamodb=None):
+#     dynamodb = boto3.resource('dynamodb')
+#
+#     # nom de la table
+#     etudiant_table = dynamodb.Table('Etudiant')
+#
+#     try:
+#         response = etudiant_table.get_item(
+#             Key={'matricule': matricule, 'filiere': filiere})
+#     except ClientError as e:
+#         print(e.response['Error']['Message'])
+#     else:
+#         return response['Item']
+#
+#
+# if __name__ == '__main__':
+#     etudiant = get_device("10001", "SI",)
+#     if etudiant:
+#         print("Les données etudiant:")
+#         # Print the data read
+#         print(etudiant)
+
+
+
+# #-----------------------------------------------------------#
+# # Insertions des données dans la tables
+# #------------------------------------------------------------#
+#
+# import json  # module de convertion Python objects à JSON
+# from decimal import Decimal
+# import boto3
+#
+#
+# def load_data(etudiants, dynamodb=None):
+#     dynamodb = boto3.resource('dynamodb')
+#
+#     etudiant_table = dynamodb.Table('Etudiant')
+#     # Loop through all the items and load each
+#     for etudiant in etudiants:
+#         matricule = (etudiant['matricule'])
+#         filiere = etudiant['filiere']
+#         # Print device info
+#         print("Chargement des données", matricule, filiere)
+#         etudiant_table.put_item(Item=etudiant)
+#
+#
+# if __name__ == '__main__':
+#     # open file and read all the data in it
+#     with open("data.json") as json_file:
+#         etudiant_list = json.load(json_file, parse_float=Decimal)
+#     load_data(etudiant_list)
+
+
+
+
+# #-----------------------------------------------------------#
+# #  Création de table sur dynamo
+# #------------------------------------------------------------#
+#
+# import boto3
+#
+# def create_devices_table(dynamodb=None): #fonction de création d'une table
+#     dynamodb = boto3.resource('dynamodb')
+#     # Table defination
+#     table = dynamodb.create_table(
+#         TableName='Etudiant',
+#         KeySchema=[
+#             {
+#                 'AttributeName': 'matricule',
+#                 'KeyType': 'HASH'  # clé de partition
+#             },
+#             {
+#                 'AttributeName': 'filiere',
+#                 'KeyType': 'RANGE'  # Sort key
+#             },
+#         ],
+#         AttributeDefinitions=[
+#             {
+#                 'AttributeName': 'matricule',
+#                 # AttributeType  'S' est pour les string type and 'N' pour les nombres
+#                 'AttributeType': 'S'
+#             },
+#             {
+#                 'AttributeName': 'filiere',
+#                 'AttributeType': 'S'
+#             },
+#         ],
+#         ProvisionedThroughput={
+#             # ReadCapacityUnits défini sur 10 lectures fortement cohérentes par seconde
+#             'ReadCapacityUnits': 10,
+#             'WriteCapacityUnits': 10  # WriteCapacityUnits défini à 10
+#         }
+#     )
+#     return table
+#
+#
+# if __name__ == '__main__':
+#
+#     device_table = create_devices_table()
+#
+#     # Afficher le statut de création
+#     print("Status:", device_table.table_status)
+
+
 # #-----------------------------------------------------------#
 # # Configuration préable
 # #------------------------------------------------------------#
